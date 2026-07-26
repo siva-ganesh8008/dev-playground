@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>LeetCode Solutions Exporter</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
+    h1 { font-size: 22px; }
+    #controls { margin: 20px 0; display: flex; gap: 10px; align-items: center; }
+    button {
+      padding: 10px 18px; border: none; border-radius: 6px;
+      background: #ffa116; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    label { font-size: 13px; }
+    #bar-wrap { background: #eee; border-radius: 6px; height: 10px; overflow: hidden; margin: 10px 0; }
+    #bar { background: #ffa116; height: 100%; width: 0%; transition: width .2s; }
+    #log {
+      background: #0d1117; color: #c9d1d9; font-family: Consolas, monospace; font-size: 12px;
+      padding: 14px; border-radius: 6px; height: 320px; overflow-y: auto; white-space: pre-wrap;
+    }
+    .err { color: #ff7b72; }
+    .ok { color: #7ee787; }
+  </style>
+</head>
+<body>
+  <h1>LeetCode Solutions → Word Document</h1>
+  <div id="controls" style="flex-wrap: wrap;">
+    <button id="startBtn">Start Export</button>
+    <label><input type="checkbox" id="onlyAC" checked /> Accepted (solved) problems only</label>
+    <label>Parallel requests:
+      <select id="concurrency">
+        <option value="1">1 (sequential, slowest)</option>
+        <option value="3" selected>3</option>
+        <option value="5">5</option>
+        <option value="8">8 (fastest, higher rate-limit risk)</option>
+      </select>
+    </label>
+  </div>
+  <div id="difficulty-controls" style="margin-bottom: 16px; font-size: 13px;">
+    <strong>Difficulty:</strong>
+    <label style="margin-left: 8px;"><input type="checkbox" class="diff" value="Easy" checked /> Easy</label>
+    <label style="margin-left: 8px;"><input type="checkbox" class="diff" value="Medium" checked /> Medium</label>
+    <label style="margin-left: 8px;"><input type="checkbox" class="diff" value="Hard" checked /> Hard</label>
+  </div>
+  <div id="bar-wrap"><div id="bar"></div></div>
+  <div id="timer" style="font-size: 13px; color: #555; margin-bottom: 10px;">Elapsed: 0:00</div>
+  <div id="log">Ready. Click "Start Export" (must be logged into leetcode.com).</div>
+
+  <script src="docx.min.js"></script>
+  <script src="export.js"></script>
+</body>
+</html>
