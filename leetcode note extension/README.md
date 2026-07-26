@@ -19,21 +19,7 @@ examples, images, and your accepted submitted code — into a single, clean Word
 
 ## 🧩 Setup (one-time)
 
-### Step 1 — Get the `docx` library file
-
-This extension uses the [`docx`](https://www.npmjs.com/package/docx) JavaScript
-library to build a real Word file in the browser. It isn't bundled in this folder,
-so grab it once:
-
-1. 🔗 Open: **https://unpkg.com/docx/dist/index.umd.cjs**
-2. 💾 Save the page as `docx.min.js` (Ctrl+S / Cmd+S → "Webpage, Text Only" or similar)
-3. 📁 Place that file in this same folder, next to `manifest.json`
-
-> ⚠️ If that link ever 404s (the library's build path has shifted before), open
-> `https://unpkg.com/browse/docx/`, look inside the `dist` or `build` folder shown
-> there, and grab whichever file is named `index.umd.js` or `index.umd.cjs`.
-
-### Step 2 — Load the extension into Chrome
+### Load the extension into Chrome
 
 1. 🌐 Open `chrome://extensions` in Chrome
 2. 🛠️ Toggle **Developer mode** on (top-right corner)
