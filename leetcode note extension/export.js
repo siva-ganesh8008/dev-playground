@@ -81,6 +81,80 @@ function getSelectedDifficulties() {
   return Array.from(document.querySelectorAll('.diff:checked')).map(el => el.value);
 }
 
+// --- Advanced filter: skill / topic tags ---
+async function getCurrentUsername() {
+  const query = `query globalData { userStatus { username isSignedIn } }`;
+  const data = await gql(query, {}, 'globalData');
+  if (!data.userStatus || !data.userStatus.isSignedIn) {
+    throw new Error('Not signed in to leetcode.com.');
+  }
+  return data.userStatus.username;
+}
+
+async function getSkillStats(username) {
+  const query = `query skillStats($username: String!) {
+    matchedUser(username: $username) {
+      tagProblemCounts {
+        advanced { tagName tagSlug problemsSolved }
+        intermediate { tagName tagSlug problemsSolved }
+        fundamental { tagName tagSlug problemsSolved }
+      }
+    }
+  }`;
+  const data = await gql(query, { username }, 'skillStats');
+  return data.matchedUser.tagProblemCounts;
+}
+
+function renderTagGroup(container, className, title, tags) {
+  const heading = document.createElement('div');
+  heading.className = `tag-group-title ${className}`;
+  heading.textContent = title;
+  container.appendChild(heading);
+
+  tags.forEach(t => {
+    const label = document.createElement('label');
+    label.className = 'tag-chip';
+    label.innerHTML = `<input type="checkbox" class="tag-filter" value="${t.tagSlug}" checked /> ${t.tagName} <span style="color:#888;">×${t.problemsSolved}</span>`;
+    container.appendChild(label);
+  });
+}
+
+document.getElementById('loadTagsBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('loadTagsBtn');
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+  try {
+    const username = await getCurrentUsername();
+    const counts = await getSkillStats(username);
+    const groupsEl = document.getElementById('tag-groups');
+    groupsEl.innerHTML = '';
+    renderTagGroup(groupsEl, 'advanced', '🔴 Advanced', counts.advanced || []);
+    renderTagGroup(groupsEl, 'intermediate', '🟡 Intermediate', counts.intermediate || []);
+    renderTagGroup(groupsEl, 'fundamental', '🟢 Fundamental', counts.fundamental || []);
+    document.getElementById('tag-actions').style.display = 'block';
+    btn.style.display = 'none';
+  } catch (e) {
+    log(`! Could not load skill tags: ${e.message}`, 'err');
+    btn.disabled = false;
+    btn.textContent = 'Load my skill tags';
+  }
+});
+
+document.getElementById('tagsSelectAll').addEventListener('click', () => {
+  document.querySelectorAll('.tag-filter').forEach(el => { el.checked = true; });
+});
+document.getElementById('tagsClearAll').addEventListener('click', () => {
+  document.querySelectorAll('.tag-filter').forEach(el => { el.checked = false; });
+});
+
+// Returns null if the tag filter was never loaded (meaning: no tag-based filtering at all).
+// Otherwise returns the array of currently-checked tag slugs (may be empty).
+function getSelectedTagSlugs() {
+  const boxes = document.querySelectorAll('.tag-filter');
+  if (boxes.length === 0) return null;
+  return Array.from(boxes).filter(b => b.checked).map(b => b.value);
+}
+
 async function getSolvedList() {
   const res = await fetch('https://leetcode.com/api/problems/all/', { credentials: 'include' });
   if (!res.ok) throw new Error('Could not load problem list. Are you logged into leetcode.com?');
@@ -111,6 +185,7 @@ async function getQuestionContent(slug) {
       titleSlug
       content
       difficulty
+      topicTags { name slug }
     }
   }`;
   const data = await gql(query, { titleSlug: slug }, 'questionData');
@@ -256,6 +331,16 @@ async function buildProblemSection(p) {
   } catch (e) {
     log(`  ! Failed to fetch statement for ${p.id}. ${p.title}: ${e.message}`, 'err');
     return null;
+  }
+
+  const selectedTags = getSelectedTagSlugs();
+  if (selectedTags !== null) {
+    const problemTagSlugs = (content.topicTags || []).map(t => t.slug);
+    const matches = problemTagSlugs.some(slug => selectedTags.includes(slug));
+    if (!matches) {
+      log(`  – Skipped (tag filter): ${p.id}. ${p.title}`);
+      return null;
+    }
   }
 
   const submission = await getAcceptedSubmission(p.slug).catch(e => {
