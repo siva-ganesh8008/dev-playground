@@ -39,6 +39,13 @@ You should now see the extension's icon in your Chrome toolbar.
 3. 🎚️ In that tab, choose your options:
    - ✔️ **Accepted (solved) problems only** — leave checked to skip unsolved/attempted problems
    - 🟢🟡🔴 **Difficulty** — check/uncheck Easy / Medium / Hard to include or exclude
+   - 🏷️ **Advanced filter: skill / topic tags** (optional, collapsed by default) — click
+     to expand, then click **Load my skill tags** to pull your real per-tag solved
+     counts from LeetCode (the same Advanced / Intermediate / Fundamental breakdown
+     you'd see on your profile's Skills section). Uncheck any tags you want to
+     exclude, or use **Select all** / **Clear all**. A problem is included if it
+     matches *any* checked tag. Leave this section untouched (never click "Load")
+     to skip tag filtering entirely.
    - ⚡ **Parallel requests** — how many problems to process at once:
      - `1` → slowest, safest
      - `3` → good default
