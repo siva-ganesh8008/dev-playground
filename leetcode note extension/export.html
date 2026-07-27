@@ -21,6 +21,15 @@
     }
     .err { color: #ff7b72; }
     .ok { color: #7ee787; }
+    details#tag-filter-details { margin-bottom: 16px; font-size: 13px; border: 1px solid #eee; border-radius: 6px; padding: 10px 14px; }
+    details#tag-filter-details summary { cursor: pointer; font-weight: 600; }
+    .tag-group-title { margin: 12px 0 6px; font-weight: 600; }
+    .tag-group-title.advanced { color: #d9534f; }
+    .tag-group-title.intermediate { color: #f0ad4e; }
+    .tag-group-title.fundamental { color: #5cb85c; }
+    .tag-chip { display: inline-block; margin: 3px 6px 3px 0; font-size: 12px; }
+    #tag-actions { margin-top: 8px; }
+    #tag-actions button { padding: 4px 10px; font-size: 12px; margin-right: 6px; background: #eee; color: #333; }
   </style>
 </head>
 <body>
@@ -43,6 +52,17 @@
     <label style="margin-left: 8px;"><input type="checkbox" class="diff" value="Medium" checked /> Medium</label>
     <label style="margin-left: 8px;"><input type="checkbox" class="diff" value="Hard" checked /> Hard</label>
   </div>
+  <details id="tag-filter-details">
+    <summary>🏷️ Advanced filter: skill / topic tags (click to load your stats)</summary>
+    <div id="tag-filter-body" style="margin-top: 10px;">
+      <button id="loadTagsBtn" type="button">Load my skill tags</button>
+      <div id="tag-actions" style="display: none;">
+        <button id="tagsSelectAll" type="button">Select all</button>
+        <button id="tagsClearAll" type="button">Clear all</button>
+      </div>
+      <div id="tag-groups"></div>
+    </div>
+  </details>
   <div id="bar-wrap"><div id="bar"></div></div>
   <div id="timer" style="font-size: 13px; color: #555; margin-bottom: 10px;">Elapsed: 0:00</div>
   <div id="log">Ready. Click "Start Export" (must be logged into leetcode.com).</div>
