@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Puzzle Cam — Gesture Capture</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <div id="stage">
+    <video id="webcam" playsinline autoplay muted></video>
+    <canvas id="sceneCanvas"></canvas>
+
+    <div class="hud-top">
+      <div class="brand">PUZZLE·CAM <small>Hand Frame Capture</small></div>
+      <div class="status-pill">
+        <span id="statusDot" class="status-dot"></span>
+        <span id="statusText">Starting camera...</span>
+      </div>
+    </div>
+
+    <div id="progressBadge" class="progress-badge">
+      <span id="progressText">0 / 9 pieces placed</span>
+    </div>
+
+    <div id="loadingOverlay">
+      <div class="loader-text" id="loaderText">Loading HandLandmarker model...</div>
+      <div class="loader-bar"></div>
+      <button type="button" id="loaderRetry" class="loader-retry hidden">Retry</button>
+    </div>
+
+    <div id="errorBanner"></div>
+  </div>
+
+  <aside id="gallery">
+    <div class="gallery-head">
+      <span class="gallery-title">Gallery</span>
+      <span class="gallery-count" id="galleryCount">0 / 3</span>
+    </div>
+
+    <div class="strip-complete-msg" id="stripCompleteMsg">
+      Strip complete — download or reset to continue
+    </div>
+
+    <div id="galleryStrip" class="gallery-strip">
+      <div class="gallery-empty" id="galleryEmpty">
+        Your completed puzzles<br/>will appear here.
+      </div>
+    </div>
+
+    <div class="gallery-actions">
+      <button type="button" id="downloadStripBtn" class="gallery-action-btn" disabled>
+        Download Strip
+      </button>
+      <button type="button" id="resetAllBtn" class="gallery-action-btn gallery-action-btn--danger">
+        Reset All
+      </button>
+    </div>
+  </aside>
+
+</div>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
